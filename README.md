@@ -1,16 +1,16 @@
-# [`MODULE` module](https://github.com/viam-modules/MODULE)
+# [`dimensionengineering` module](https://github.com/viam-modules/dimensionengineering)
 
-This [MODULE module](https://app.viam.com/module/viam/MODULE) implements a MODULE [MODEL COMPONENT](<LINK TO HARDWARE>), used for <DESCRIPTION> using the [`rdk:component:COMPONENT` API](https://docs.viam.com/appendix/apis/components/COMPONENT/).
+This [dimensionengineering module](https://app.viam.com/module/viam/dimensionengineering) implements a dimensionengineering [sabertooth motor](<LINK TO HARDWARE>), used for <DESCRIPTION> using the [`rdk:component:motor` API](https://docs.viam.com/appendix/apis/components/motor/).
 
 > [!NOTE]
-> Before configuring your COMPONENT, you must [create a machine](https://docs.viam.com/cloud/machines/#add-a-new-machine).
+> Before configuring your motor, you must [create a machine](https://docs.viam.com/cloud/machines/#add-a-new-machine).
 
-## Configure your MODEL COMPONENT
+## Configure your sabertooth motor
 
 Navigate to the [**CONFIGURE** tab](https://docs.viam.com/configure/) of your [machine](https://docs.viam.com/fleet/machines/) in the [Viam app](https://app.viam.com/).
-[Add COMPONENT / MODULE:MODEL to your machine](https://docs.viam.com/configure/#components).
+[Add motor / dimensionengineering:sabertooth to your machine](https://docs.viam.com/configure/#components).
 
-On the new component panel, copy and paste the following attribute template into your COMPONENT's attributes field:
+On the new component panel, copy and paste the following attribute template into your motor's attributes field:
 
 ```json
 {
@@ -20,22 +20,22 @@ On the new component panel, copy and paste the following attribute template into
 
 ### Attributes
 
-The following attributes are available for `viam:MODULE:MODEL` COMPONENTs:
+The following attributes are available for `viam:dimensionengineering:sabertooth` motors:
 
 <EXAMPLE !!>
 | Attribute | Type | Required? | Description |
 | --------- | ---- | --------- | ----------  |
-| `i2c_bus` | string | **Required** | The index of the I<sup>2</sup>C bus on the board that the COMPONENT is wired to. |
-| `i2c_address` | string | Optional | Default: `0x77`. The [I<sup>2</sup>C device address](https://learn.adafruit.com/i2c-addresses/overview) of the COMPONENT. |
+| `i2c_bus` | string | **Required** | The index of the I<sup>2</sup>C bus on the board that the motor is wired to. |
+| `i2c_address` | string | Optional | Default: `0x77`. The [I<sup>2</sup>C device address](https://learn.adafruit.com/i2c-addresses/overview) of the motor. |
 
 ## Example configuration
 
-### `viam:MODULE:MODEL`
+### `viam:dimensionengineering:sabertooth`
 ```json
   {
-      "name": "<your-MODULE-MODEL-COMPONENT-name>",
-      "model": "viam:MODULE:MODEL",
-      "type": "COMPONENT",
+      "name": "<your-dimensionengineering-sabertooth-motor-name>",
+      "model": "viam:dimensionengineering:sabertooth",
+      "type": "motor",
       "namespace": "rdk",
       "attributes": {
       },
@@ -44,6 +44,6 @@ The following attributes are available for `viam:MODULE:MODEL` COMPONENTs:
 ```
 
 ### Next Steps
-- To test your COMPONENT, expand the **TEST** section of its configuration pane or go to the [**CONTROL** tab](https://docs.viam.com/fleet/control/).
-- To write code against your COMPONENT, use one of the [available SDKs](https://docs.viam.com/sdks/).
-- To view examples using a COMPONENT component, explore [these tutorials](https://docs.viam.com/tutorials/).
+- To test your motor, expand the **TEST** section of its configuration pane or go to the [**CONTROL** tab](https://docs.viam.com/fleet/control/).
+- To write code against your motor, use one of the [available SDKs](https://docs.viam.com/sdks/).
+- To view examples using a motor component, explore [these tutorials](https://docs.viam.com/tutorials/).
