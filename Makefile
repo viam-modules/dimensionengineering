@@ -2,7 +2,6 @@ BIN_OUTPUT_PATH = bin
 TOOL_BIN = bin/gotools/$(shell uname -s)-$(shell uname -m)
 COMMON_LDFLAGS = -s -w #-X 'go.viam.com/rdk/config.Version=${TAG_VERSION}' -X 'go.viam.com/rdk/config.GitRevision=${GIT_REVISION}' -X 'go.viam.com/rdk/config.DateCompiled=${DATE_COMPILED}'
 UNAME_S ?= $(shell uname -s)
-PATH_WITH_TOOLS="`pwd`/$(TOOL_BIN):`pwd`/node_modules/.bin:${PATH}"
 
 ifeq ($(shell command -v dpkg >/dev/null && dpkg --print-architecture),armhf)
 GOFLAGS += -tags=no_tflite
@@ -28,7 +27,7 @@ tool-install:
 		github.com/rhysd/actionlint/cmd/actionlint
 
 lint: lint-go
-	PATH=$(PATH_WITH_TOOLS) actionlint
+	PATH=$(TOOL_BIN) actionlint
 
 lint-go: tool-install
 	go mod tidy
@@ -38,7 +37,7 @@ lint-go: tool-install
 test: test-go
 
 test-go: tool-install
-	PATH=$(PATH_WITH_TOOLS) ./etc/test.sh race
+	go test -race ./...
 
 clean-all:
 	git clean -fxd
