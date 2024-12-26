@@ -4,7 +4,7 @@ package main
 import (
 	"context"
 
-	"dimensionengineering/sabertooth"
+	"github.com/viam-modules/dimensionengineering/sabertooth"
 
 	"go.viam.com/rdk/components/motor"
 	"go.viam.com/rdk/logging"

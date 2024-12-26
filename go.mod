@@ -1,4 +1,4 @@
-module dimensionengineering
+module github.com/viam-modules/dimensionengineering
 
 go 1.23.0
 
