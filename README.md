@@ -33,9 +33,7 @@ The following attributes are available for `viam:dimensionengineering:sabertooth
 | `address` | int | **Required** | Serial address of the controller. |
 | `motor_channel` | int | **Required** | Channel the motor is connected to on the controller. |
 
-## Example configuration
-
-### `viam:dimensionengineering:sabertooth`
+### Example configuration
 
 ```json
   {
