@@ -7,7 +7,9 @@
   "models": [
     {
       "api": "rdk:component:motor",
-      "model": "viam:dimensionengineering:sabertooth"
+      "model": "viam:dimensionengineering:sabertooth",
+      "short_description": "the dimensionengineering sabertooth motor",
+      "markdown_link": "README.md#configure-sabertooth-motor"
     }
   ],
   "build": {
