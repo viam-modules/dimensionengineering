@@ -7,13 +7,14 @@ import (
 	"testing"
 
 	"go.viam.com/rdk/components/motor"
-	"go.viam.com/rdk/components/motor/dimensionengineering"
 	"go.viam.com/rdk/logging"
 	"go.viam.com/rdk/resource"
 	"go.viam.com/test"
+
+	"github.com/viam-modules/dimensionengineering/sabertooth"
 )
 
-var sabertoothModel = resource.DefaultModelFamily.WithModel("de-sabertooth")
+var sabertoothModel = sabertooth.Model
 
 func checkTx(t *testing.T, resChan chan string, c chan []byte, expects []byte) {
 	t.Helper()
@@ -31,7 +32,7 @@ func TestSabertoothMotor(t *testing.T) {
 	resChan := make(chan string, 1024)
 	deps := make(resource.Dependencies)
 
-	mc1 := dimensionengineering.Config{
+	mc1 := sabertooth.Config{
 		SerialPath:    "testchan",
 		MotorChannel:  1,
 		TestChan:      c,
@@ -131,7 +132,7 @@ func TestSabertoothMotor(t *testing.T) {
 		test.That(t, motor1.GoFor(ctx, 10, 0, nil), test.ShouldBeError, motor.NewZeroRevsError())
 	})
 
-	mc2 := dimensionengineering.Config{
+	mc2 := sabertooth.Config{
 		SerialPath:    "testchan",
 		MotorChannel:  2,
 		TestChan:      c,
@@ -195,7 +196,7 @@ func TestSabertoothMotorDirectionFlip(t *testing.T) {
 	resChan := make(chan string, 1024)
 	deps := make(resource.Dependencies)
 
-	mc1 := dimensionengineering.Config{
+	mc1 := sabertooth.Config{
 		SerialPath:    "testchan",
 		MotorChannel:  1,
 		TestChan:      c,
@@ -249,7 +250,7 @@ func TestSabertoothMotorDirectionFlip(t *testing.T) {
 		test.That(t, fmt.Sprint(latestLoggedEntry), test.ShouldContainSubstring, "nearly 0")
 	})
 
-	mc2 := dimensionengineering.Config{
+	mc2 := sabertooth.Config{
 		SerialPath:    "testchan",
 		MotorChannel:  2,
 		TestChan:      c,
@@ -312,7 +313,7 @@ func TestSabertoothRampConfig(t *testing.T) {
 	resChan := make(chan string, 1024)
 	deps := make(resource.Dependencies)
 
-	mc1 := dimensionengineering.Config{
+	mc1 := sabertooth.Config{
 		SerialPath:    "testchan",
 		MotorChannel:  1,
 		TestChan:      c,
@@ -344,7 +345,7 @@ func TestSabertoothAddressMapping(t *testing.T) {
 	resChan := make(chan string, 1024)
 	deps := make(resource.Dependencies)
 
-	mc1 := dimensionengineering.Config{
+	mc1 := sabertooth.Config{
 		SerialPath:    "testchan",
 		MotorChannel:  1,
 		TestChan:      c,
@@ -369,7 +370,7 @@ func TestInvalidMotorChannel(t *testing.T) {
 	c := make(chan []byte, 1024)
 	deps := make(resource.Dependencies)
 
-	mc1 := dimensionengineering.Config{
+	mc1 := sabertooth.Config{
 		SerialPath:    "testchan",
 		MotorChannel:  3,
 		TestChan:      c,
@@ -391,7 +392,7 @@ func TestInvalidBaudRate(t *testing.T) {
 	c := make(chan []byte, 1024)
 	deps := make(resource.Dependencies)
 
-	mc1 := dimensionengineering.Config{
+	mc1 := sabertooth.Config{
 		SerialPath:    "testchan",
 		MotorChannel:  1,
 		TestChan:      c,
@@ -414,7 +415,7 @@ func TestInvalidSerialAddress(t *testing.T) {
 	c := make(chan []byte, 1024)
 	deps := make(resource.Dependencies)
 
-	mc1 := dimensionengineering.Config{
+	mc1 := sabertooth.Config{
 		SerialPath:    "testchan",
 		MotorChannel:  1,
 		TestChan:      c,
@@ -436,7 +437,7 @@ func TestInvalidMinPowerPct(t *testing.T) {
 	c := make(chan []byte, 1024)
 	deps := make(resource.Dependencies)
 
-	mc1 := dimensionengineering.Config{
+	mc1 := sabertooth.Config{
 		SerialPath:    "testchan",
 		MotorChannel:  1,
 		TestChan:      c,
@@ -460,7 +461,7 @@ func TestInvalidMaxPowerPct(t *testing.T) {
 	c := make(chan []byte, 1024)
 	deps := make(resource.Dependencies)
 
-	mc1 := dimensionengineering.Config{
+	mc1 := sabertooth.Config{
 		SerialPath:    "testchan",
 		MotorChannel:  1,
 		TestChan:      c,
@@ -484,7 +485,7 @@ func TestMultipleInvalidParameters(t *testing.T) {
 	c := make(chan []byte, 1024)
 	deps := make(resource.Dependencies)
 
-	mc1 := dimensionengineering.Config{
+	mc1 := sabertooth.Config{
 		SerialPath:    "testchan",
 		MotorChannel:  3,
 		TestChan:      c,
