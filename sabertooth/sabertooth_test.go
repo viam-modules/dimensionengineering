@@ -2,18 +2,17 @@ package sabertooth_test
 
 import (
 	"bytes"
-	"context"
 	"fmt"
 	"testing"
 
+	"github.com/viam-modules/dimensionengineering/sabertooth"
 	"go.viam.com/rdk/components/motor"
-	"go.viam.com/rdk/components/motor/dimensionengineering"
 	"go.viam.com/rdk/logging"
 	"go.viam.com/rdk/resource"
 	"go.viam.com/test"
 )
 
-var sabertoothModel = resource.DefaultModelFamily.WithModel("de-sabertooth")
+var sabertoothModel = sabertooth.Model
 
 func checkTx(t *testing.T, resChan chan string, c chan []byte, expects []byte) {
 	t.Helper()
@@ -25,13 +24,13 @@ func checkTx(t *testing.T, resChan chan string, c chan []byte, expects []byte) {
 
 //nolint:dupl
 func TestSabertoothMotor(t *testing.T) {
-	ctx := context.Background()
+	ctx := t.Context()
 	logger, obs := logging.NewObservedTestLogger(t)
 	c := make(chan []byte, 1024)
 	resChan := make(chan string, 1024)
 	deps := make(resource.Dependencies)
 
-	mc1 := dimensionengineering.Config{
+	mc1 := sabertooth.Config{
 		SerialPath:    "testchan",
 		MotorChannel:  1,
 		TestChan:      c,
@@ -45,7 +44,7 @@ func TestSabertoothMotor(t *testing.T) {
 	test.That(t, motorReg, test.ShouldNotBeNil)
 
 	// These are the setup register writes
-	m1, err := motorReg.Constructor(context.Background(), deps, resource.Config{Name: "motor1", ConvertedAttributes: &mc1}, logger)
+	m1, err := motorReg.Constructor(t.Context(), deps, resource.Config{Name: "motor1", ConvertedAttributes: &mc1}, logger)
 	test.That(t, err, test.ShouldBeNil)
 	defer m1.Close(ctx)
 
@@ -131,7 +130,7 @@ func TestSabertoothMotor(t *testing.T) {
 		test.That(t, motor1.GoFor(ctx, 10, 0, nil), test.ShouldBeError, motor.NewZeroRevsError())
 	})
 
-	mc2 := dimensionengineering.Config{
+	mc2 := sabertooth.Config{
 		SerialPath:    "testchan",
 		MotorChannel:  2,
 		TestChan:      c,
@@ -140,7 +139,7 @@ func TestSabertoothMotor(t *testing.T) {
 		MaxRPM:        1,
 	}
 
-	m2, err := motorReg.Constructor(context.Background(), deps, resource.Config{Name: "motor2", ConvertedAttributes: &mc2}, logger)
+	m2, err := motorReg.Constructor(t.Context(), deps, resource.Config{Name: "motor2", ConvertedAttributes: &mc2}, logger)
 	test.That(t, err, test.ShouldBeNil)
 	defer m2.Close(ctx)
 
@@ -189,13 +188,13 @@ func TestSabertoothMotor(t *testing.T) {
 
 //nolint:dupl
 func TestSabertoothMotorDirectionFlip(t *testing.T) {
-	ctx := context.Background()
+	ctx := t.Context()
 	logger, obs := logging.NewObservedTestLogger(t)
 	c := make(chan []byte, 1024)
 	resChan := make(chan string, 1024)
 	deps := make(resource.Dependencies)
 
-	mc1 := dimensionengineering.Config{
+	mc1 := sabertooth.Config{
 		SerialPath:    "testchan",
 		MotorChannel:  1,
 		TestChan:      c,
@@ -209,7 +208,7 @@ func TestSabertoothMotorDirectionFlip(t *testing.T) {
 	test.That(t, motorReg, test.ShouldNotBeNil)
 
 	// These are the setup register writes
-	m1, err := motorReg.Constructor(context.Background(), deps, resource.Config{Name: "motor1", ConvertedAttributes: &mc1}, logger)
+	m1, err := motorReg.Constructor(t.Context(), deps, resource.Config{Name: "motor1", ConvertedAttributes: &mc1}, logger)
 	test.That(t, err, test.ShouldBeNil)
 	defer m1.Close(ctx)
 
@@ -249,7 +248,7 @@ func TestSabertoothMotorDirectionFlip(t *testing.T) {
 		test.That(t, fmt.Sprint(latestLoggedEntry), test.ShouldContainSubstring, "nearly 0")
 	})
 
-	mc2 := dimensionengineering.Config{
+	mc2 := sabertooth.Config{
 		SerialPath:    "testchan",
 		MotorChannel:  2,
 		TestChan:      c,
@@ -258,7 +257,7 @@ func TestSabertoothMotorDirectionFlip(t *testing.T) {
 		MaxRPM:        1,
 	}
 
-	m2, err := motorReg.Constructor(context.Background(), deps, resource.Config{Name: "motor2", ConvertedAttributes: &mc2}, logger)
+	m2, err := motorReg.Constructor(t.Context(), deps, resource.Config{Name: "motor2", ConvertedAttributes: &mc2}, logger)
 	test.That(t, err, test.ShouldBeNil)
 	defer m2.Close(ctx)
 
@@ -306,13 +305,13 @@ func TestSabertoothMotorDirectionFlip(t *testing.T) {
 }
 
 func TestSabertoothRampConfig(t *testing.T) {
-	ctx := context.Background()
+	ctx := t.Context()
 	logger := logging.NewTestLogger(t)
 	c := make(chan []byte, 1024)
 	resChan := make(chan string, 1024)
 	deps := make(resource.Dependencies)
 
-	mc1 := dimensionengineering.Config{
+	mc1 := sabertooth.Config{
 		SerialPath:    "testchan",
 		MotorChannel:  1,
 		TestChan:      c,
@@ -326,7 +325,7 @@ func TestSabertoothRampConfig(t *testing.T) {
 	test.That(t, motorReg, test.ShouldNotBeNil)
 
 	// These are the setup register writes
-	m1, err := motorReg.Constructor(context.Background(), deps, resource.Config{Name: "motor1", ConvertedAttributes: &mc1}, logger)
+	m1, err := motorReg.Constructor(t.Context(), deps, resource.Config{Name: "motor1", ConvertedAttributes: &mc1}, logger)
 	test.That(t, err, test.ShouldBeNil)
 	defer m1.Close(ctx)
 
@@ -338,13 +337,13 @@ func TestSabertoothRampConfig(t *testing.T) {
 }
 
 func TestSabertoothAddressMapping(t *testing.T) {
-	ctx := context.Background()
+	ctx := t.Context()
 	logger := logging.NewTestLogger(t)
 	c := make(chan []byte, 1024)
 	resChan := make(chan string, 1024)
 	deps := make(resource.Dependencies)
 
-	mc1 := dimensionengineering.Config{
+	mc1 := sabertooth.Config{
 		SerialPath:    "testchan",
 		MotorChannel:  1,
 		TestChan:      c,
@@ -357,7 +356,7 @@ func TestSabertoothAddressMapping(t *testing.T) {
 	test.That(t, motorReg, test.ShouldNotBeNil)
 
 	// These are the setup register writes
-	m1, err := motorReg.Constructor(context.Background(), deps, resource.Config{Name: "motor1", ConvertedAttributes: &mc1}, logger)
+	m1, err := motorReg.Constructor(t.Context(), deps, resource.Config{Name: "motor1", ConvertedAttributes: &mc1}, logger)
 	test.That(t, err, test.ShouldBeNil)
 	defer m1.Close(ctx)
 
@@ -369,7 +368,7 @@ func TestInvalidMotorChannel(t *testing.T) {
 	c := make(chan []byte, 1024)
 	deps := make(resource.Dependencies)
 
-	mc1 := dimensionengineering.Config{
+	mc1 := sabertooth.Config{
 		SerialPath:    "testchan",
 		MotorChannel:  3,
 		TestChan:      c,
@@ -382,7 +381,7 @@ func TestInvalidMotorChannel(t *testing.T) {
 	test.That(t, motorReg, test.ShouldNotBeNil)
 
 	// These are the setup register writes
-	_, err := motorReg.Constructor(context.Background(), deps, resource.Config{Name: "motor1", ConvertedAttributes: &mc1}, logger)
+	_, err := motorReg.Constructor(t.Context(), deps, resource.Config{Name: "motor1", ConvertedAttributes: &mc1}, logger)
 	test.That(t, err.Error(), test.ShouldContainSubstring, "invalid channel")
 }
 
@@ -391,7 +390,7 @@ func TestInvalidBaudRate(t *testing.T) {
 	c := make(chan []byte, 1024)
 	deps := make(resource.Dependencies)
 
-	mc1 := dimensionengineering.Config{
+	mc1 := sabertooth.Config{
 		SerialPath:    "testchan",
 		MotorChannel:  1,
 		TestChan:      c,
@@ -405,7 +404,7 @@ func TestInvalidBaudRate(t *testing.T) {
 	test.That(t, motorReg, test.ShouldNotBeNil)
 
 	// These are the setup register writes
-	_, err := motorReg.Constructor(context.Background(), deps, resource.Config{Name: "motor1", ConvertedAttributes: &mc1}, logger)
+	_, err := motorReg.Constructor(t.Context(), deps, resource.Config{Name: "motor1", ConvertedAttributes: &mc1}, logger)
 	test.That(t, err.Error(), test.ShouldContainSubstring, "invalid baud_rate")
 }
 
@@ -414,7 +413,7 @@ func TestInvalidSerialAddress(t *testing.T) {
 	c := make(chan []byte, 1024)
 	deps := make(resource.Dependencies)
 
-	mc1 := dimensionengineering.Config{
+	mc1 := sabertooth.Config{
 		SerialPath:    "testchan",
 		MotorChannel:  1,
 		TestChan:      c,
@@ -427,7 +426,7 @@ func TestInvalidSerialAddress(t *testing.T) {
 	test.That(t, motorReg, test.ShouldNotBeNil)
 
 	// These are the setup register writes
-	_, err := motorReg.Constructor(context.Background(), deps, resource.Config{Name: "motor1", ConvertedAttributes: &mc1}, logger)
+	_, err := motorReg.Constructor(t.Context(), deps, resource.Config{Name: "motor1", ConvertedAttributes: &mc1}, logger)
 	test.That(t, err.Error(), test.ShouldContainSubstring, "invalid address")
 }
 
@@ -436,7 +435,7 @@ func TestInvalidMinPowerPct(t *testing.T) {
 	c := make(chan []byte, 1024)
 	deps := make(resource.Dependencies)
 
-	mc1 := dimensionengineering.Config{
+	mc1 := sabertooth.Config{
 		SerialPath:    "testchan",
 		MotorChannel:  1,
 		TestChan:      c,
@@ -451,7 +450,7 @@ func TestInvalidMinPowerPct(t *testing.T) {
 	test.That(t, motorReg, test.ShouldNotBeNil)
 
 	// These are the setup register writes
-	_, err := motorReg.Constructor(context.Background(), deps, resource.Config{Name: "motor1", ConvertedAttributes: &mc1}, logger)
+	_, err := motorReg.Constructor(t.Context(), deps, resource.Config{Name: "motor1", ConvertedAttributes: &mc1}, logger)
 	test.That(t, err.Error(), test.ShouldContainSubstring, "invalid min_power_pct")
 }
 
@@ -460,7 +459,7 @@ func TestInvalidMaxPowerPct(t *testing.T) {
 	c := make(chan []byte, 1024)
 	deps := make(resource.Dependencies)
 
-	mc1 := dimensionengineering.Config{
+	mc1 := sabertooth.Config{
 		SerialPath:    "testchan",
 		MotorChannel:  1,
 		TestChan:      c,
@@ -475,7 +474,7 @@ func TestInvalidMaxPowerPct(t *testing.T) {
 	test.That(t, motorReg, test.ShouldNotBeNil)
 
 	// These are the setup register writes
-	_, err := motorReg.Constructor(context.Background(), deps, resource.Config{Name: "motor1", ConvertedAttributes: &mc1}, logger)
+	_, err := motorReg.Constructor(t.Context(), deps, resource.Config{Name: "motor1", ConvertedAttributes: &mc1}, logger)
 	test.That(t, err.Error(), test.ShouldContainSubstring, "invalid max_power_pct")
 }
 
@@ -484,7 +483,7 @@ func TestMultipleInvalidParameters(t *testing.T) {
 	c := make(chan []byte, 1024)
 	deps := make(resource.Dependencies)
 
-	mc1 := dimensionengineering.Config{
+	mc1 := sabertooth.Config{
 		SerialPath:    "testchan",
 		MotorChannel:  3,
 		TestChan:      c,
@@ -500,7 +499,7 @@ func TestMultipleInvalidParameters(t *testing.T) {
 	test.That(t, motorReg, test.ShouldNotBeNil)
 
 	// These are the setup register writes
-	_, err := motorReg.Constructor(context.Background(), deps, resource.Config{Name: "motor1", ConvertedAttributes: &mc1}, logger)
+	_, err := motorReg.Constructor(t.Context(), deps, resource.Config{Name: "motor1", ConvertedAttributes: &mc1}, logger)
 	test.That(t, err.Error(), test.ShouldContainSubstring, "invalid channel")
 	test.That(t, err.Error(), test.ShouldContainSubstring, "invalid address")
 	test.That(t, err.Error(), test.ShouldContainSubstring, "invalid baud_rate")

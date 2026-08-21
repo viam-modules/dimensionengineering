@@ -111,12 +111,12 @@ type Config struct {
 }
 
 // Validate ensures all parts of the config are valid.
-func (cfg *Config) Validate(path string) ([]string, error) {
+func (cfg *Config) Validate(path string) ([]string, []string, error) {
 	if cfg.SerialPath == "" {
-		return nil, resource.NewConfigValidationFieldRequiredError(path, "serial_path")
+		return nil, nil, resource.NewConfigValidationFieldRequiredError(path, "serial_path")
 	}
 
-	return nil, nil
+	return nil, nil, nil
 }
 
 func init() {
