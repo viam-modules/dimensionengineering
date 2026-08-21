@@ -2,16 +2,14 @@ package sabertooth_test
 
 import (
 	"bytes"
-	"context"
 	"fmt"
 	"testing"
 
+	"github.com/viam-modules/dimensionengineering/sabertooth"
 	"go.viam.com/rdk/components/motor"
 	"go.viam.com/rdk/logging"
 	"go.viam.com/rdk/resource"
 	"go.viam.com/test"
-
-	"github.com/viam-modules/dimensionengineering/sabertooth"
 )
 
 var sabertoothModel = sabertooth.Model
@@ -26,7 +24,7 @@ func checkTx(t *testing.T, resChan chan string, c chan []byte, expects []byte) {
 
 //nolint:dupl
 func TestSabertoothMotor(t *testing.T) {
-	ctx := context.Background()
+	ctx := t.Context()
 	logger, obs := logging.NewObservedTestLogger(t)
 	c := make(chan []byte, 1024)
 	resChan := make(chan string, 1024)
@@ -46,7 +44,7 @@ func TestSabertoothMotor(t *testing.T) {
 	test.That(t, motorReg, test.ShouldNotBeNil)
 
 	// These are the setup register writes
-	m1, err := motorReg.Constructor(context.Background(), deps, resource.Config{Name: "motor1", ConvertedAttributes: &mc1}, logger)
+	m1, err := motorReg.Constructor(t.Context(), deps, resource.Config{Name: "motor1", ConvertedAttributes: &mc1}, logger)
 	test.That(t, err, test.ShouldBeNil)
 	defer m1.Close(ctx)
 
@@ -141,7 +139,7 @@ func TestSabertoothMotor(t *testing.T) {
 		MaxRPM:        1,
 	}
 
-	m2, err := motorReg.Constructor(context.Background(), deps, resource.Config{Name: "motor2", ConvertedAttributes: &mc2}, logger)
+	m2, err := motorReg.Constructor(t.Context(), deps, resource.Config{Name: "motor2", ConvertedAttributes: &mc2}, logger)
 	test.That(t, err, test.ShouldBeNil)
 	defer m2.Close(ctx)
 
@@ -190,7 +188,7 @@ func TestSabertoothMotor(t *testing.T) {
 
 //nolint:dupl
 func TestSabertoothMotorDirectionFlip(t *testing.T) {
-	ctx := context.Background()
+	ctx := t.Context()
 	logger, obs := logging.NewObservedTestLogger(t)
 	c := make(chan []byte, 1024)
 	resChan := make(chan string, 1024)
@@ -210,7 +208,7 @@ func TestSabertoothMotorDirectionFlip(t *testing.T) {
 	test.That(t, motorReg, test.ShouldNotBeNil)
 
 	// These are the setup register writes
-	m1, err := motorReg.Constructor(context.Background(), deps, resource.Config{Name: "motor1", ConvertedAttributes: &mc1}, logger)
+	m1, err := motorReg.Constructor(t.Context(), deps, resource.Config{Name: "motor1", ConvertedAttributes: &mc1}, logger)
 	test.That(t, err, test.ShouldBeNil)
 	defer m1.Close(ctx)
 
@@ -259,7 +257,7 @@ func TestSabertoothMotorDirectionFlip(t *testing.T) {
 		MaxRPM:        1,
 	}
 
-	m2, err := motorReg.Constructor(context.Background(), deps, resource.Config{Name: "motor2", ConvertedAttributes: &mc2}, logger)
+	m2, err := motorReg.Constructor(t.Context(), deps, resource.Config{Name: "motor2", ConvertedAttributes: &mc2}, logger)
 	test.That(t, err, test.ShouldBeNil)
 	defer m2.Close(ctx)
 
@@ -307,7 +305,7 @@ func TestSabertoothMotorDirectionFlip(t *testing.T) {
 }
 
 func TestSabertoothRampConfig(t *testing.T) {
-	ctx := context.Background()
+	ctx := t.Context()
 	logger := logging.NewTestLogger(t)
 	c := make(chan []byte, 1024)
 	resChan := make(chan string, 1024)
@@ -327,7 +325,7 @@ func TestSabertoothRampConfig(t *testing.T) {
 	test.That(t, motorReg, test.ShouldNotBeNil)
 
 	// These are the setup register writes
-	m1, err := motorReg.Constructor(context.Background(), deps, resource.Config{Name: "motor1", ConvertedAttributes: &mc1}, logger)
+	m1, err := motorReg.Constructor(t.Context(), deps, resource.Config{Name: "motor1", ConvertedAttributes: &mc1}, logger)
 	test.That(t, err, test.ShouldBeNil)
 	defer m1.Close(ctx)
 
@@ -339,7 +337,7 @@ func TestSabertoothRampConfig(t *testing.T) {
 }
 
 func TestSabertoothAddressMapping(t *testing.T) {
-	ctx := context.Background()
+	ctx := t.Context()
 	logger := logging.NewTestLogger(t)
 	c := make(chan []byte, 1024)
 	resChan := make(chan string, 1024)
@@ -358,7 +356,7 @@ func TestSabertoothAddressMapping(t *testing.T) {
 	test.That(t, motorReg, test.ShouldNotBeNil)
 
 	// These are the setup register writes
-	m1, err := motorReg.Constructor(context.Background(), deps, resource.Config{Name: "motor1", ConvertedAttributes: &mc1}, logger)
+	m1, err := motorReg.Constructor(t.Context(), deps, resource.Config{Name: "motor1", ConvertedAttributes: &mc1}, logger)
 	test.That(t, err, test.ShouldBeNil)
 	defer m1.Close(ctx)
 
@@ -383,7 +381,7 @@ func TestInvalidMotorChannel(t *testing.T) {
 	test.That(t, motorReg, test.ShouldNotBeNil)
 
 	// These are the setup register writes
-	_, err := motorReg.Constructor(context.Background(), deps, resource.Config{Name: "motor1", ConvertedAttributes: &mc1}, logger)
+	_, err := motorReg.Constructor(t.Context(), deps, resource.Config{Name: "motor1", ConvertedAttributes: &mc1}, logger)
 	test.That(t, err.Error(), test.ShouldContainSubstring, "invalid channel")
 }
 
@@ -406,7 +404,7 @@ func TestInvalidBaudRate(t *testing.T) {
 	test.That(t, motorReg, test.ShouldNotBeNil)
 
 	// These are the setup register writes
-	_, err := motorReg.Constructor(context.Background(), deps, resource.Config{Name: "motor1", ConvertedAttributes: &mc1}, logger)
+	_, err := motorReg.Constructor(t.Context(), deps, resource.Config{Name: "motor1", ConvertedAttributes: &mc1}, logger)
 	test.That(t, err.Error(), test.ShouldContainSubstring, "invalid baud_rate")
 }
 
@@ -428,7 +426,7 @@ func TestInvalidSerialAddress(t *testing.T) {
 	test.That(t, motorReg, test.ShouldNotBeNil)
 
 	// These are the setup register writes
-	_, err := motorReg.Constructor(context.Background(), deps, resource.Config{Name: "motor1", ConvertedAttributes: &mc1}, logger)
+	_, err := motorReg.Constructor(t.Context(), deps, resource.Config{Name: "motor1", ConvertedAttributes: &mc1}, logger)
 	test.That(t, err.Error(), test.ShouldContainSubstring, "invalid address")
 }
 
@@ -452,7 +450,7 @@ func TestInvalidMinPowerPct(t *testing.T) {
 	test.That(t, motorReg, test.ShouldNotBeNil)
 
 	// These are the setup register writes
-	_, err := motorReg.Constructor(context.Background(), deps, resource.Config{Name: "motor1", ConvertedAttributes: &mc1}, logger)
+	_, err := motorReg.Constructor(t.Context(), deps, resource.Config{Name: "motor1", ConvertedAttributes: &mc1}, logger)
 	test.That(t, err.Error(), test.ShouldContainSubstring, "invalid min_power_pct")
 }
 
@@ -476,7 +474,7 @@ func TestInvalidMaxPowerPct(t *testing.T) {
 	test.That(t, motorReg, test.ShouldNotBeNil)
 
 	// These are the setup register writes
-	_, err := motorReg.Constructor(context.Background(), deps, resource.Config{Name: "motor1", ConvertedAttributes: &mc1}, logger)
+	_, err := motorReg.Constructor(t.Context(), deps, resource.Config{Name: "motor1", ConvertedAttributes: &mc1}, logger)
 	test.That(t, err.Error(), test.ShouldContainSubstring, "invalid max_power_pct")
 }
 
@@ -501,7 +499,7 @@ func TestMultipleInvalidParameters(t *testing.T) {
 	test.That(t, motorReg, test.ShouldNotBeNil)
 
 	// These are the setup register writes
-	_, err := motorReg.Constructor(context.Background(), deps, resource.Config{Name: "motor1", ConvertedAttributes: &mc1}, logger)
+	_, err := motorReg.Constructor(t.Context(), deps, resource.Config{Name: "motor1", ConvertedAttributes: &mc1}, logger)
 	test.That(t, err.Error(), test.ShouldContainSubstring, "invalid channel")
 	test.That(t, err.Error(), test.ShouldContainSubstring, "invalid address")
 	test.That(t, err.Error(), test.ShouldContainSubstring, "invalid baud_rate")
